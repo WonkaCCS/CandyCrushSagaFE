@@ -18,11 +18,17 @@ body {
     height: 600px;
     box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5);
 }
+.error-message {
+    text-align: center;
+    font-size: 24px;
+    padding: 20px;
+    color: black; /* Set the text color to black */
+}
 </style>
 </head>
 <body>
 <noscript>
-    <div style="text-align: center; font-size: 24px; padding: 20px;">
+    <div class="error-message">
         This game requires JavaScript to be enabled.
     </div>
 </noscript>
@@ -48,9 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!hasFlash) {
         // Flash Player not found, display alternative message
         var errorMessage = document.createElement('div');
-        errorMessage.style.textAlign = 'center';
-        errorMessage.style.fontSize = '24px';
-        errorMessage.style.padding = '20px';
+        errorMessage.className = 'error-message';
         errorMessage.textContent = 'Your browser is too modern. Please get help at <a href="https://discord.gg/pSpFYR666b" target="_blank">https://discord.gg/pSpFYR666b</a>.';
         document.body.innerHTML = ''; // Clear existing content
         document.body.appendChild(errorMessage);
