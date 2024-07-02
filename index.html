@@ -21,23 +21,53 @@ body {
 </style>
 </head>
 <body>
+<noscript>
+    <div style="text-align: center; font-size: 24px; padding: 20px;">
+        This game requires JavaScript to be enabled.
+    </div>
+</noscript>
 <center><embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash"></center>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Random number generator
-    var randomBgNumber = Math.floor(Math.random() * 23) + 1;
-    
-    document.getElementById("backgroundStyle").textContent = 'body { background: url(\'bg' + randomBgNumber + '.jpg\') no-repeat center center fixed; background-size: cover; }';
-    
-    window.getLevelCode = function() {
-        console.log("GetLevelCode")
-        return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;")
+    // Check if Flash Player is supported
+    var hasFlash = false;
+    try {
+        var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+        if (fo) {
+            hasFlash = true;
+        }
+    } catch (e) {
+        if (navigator.mimeTypes
+            && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined
+            && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) {
+            hasFlash = true;
+        }
     }
 
-    setTimeout(function() {
-        document.getElementById("flash").getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]))
-    }, 2500)
+    if (!hasFlash) {
+        // Flash Player not found, display alternative message
+        var errorMessage = document.createElement('div');
+        errorMessage.style.textAlign = 'center';
+        errorMessage.style.fontSize = '24px';
+        errorMessage.style.padding = '20px';
+        errorMessage.textContent = 'Your browser is too modern. Please get help at <a href="https://discord.gg/pSpFYR666b" target="_blank">https://discord.gg/pSpFYR666b</a>.';
+        document.body.innerHTML = ''; // Clear existing content
+        document.body.appendChild(errorMessage);
+    } else {
+        // Flash Player is supported, continue with your code
+        var randomBgNumber = Math.floor(Math.random() * 23) + 1;
+        document.getElementById("backgroundStyle").textContent = 'body { background: url(\'bg' + randomBgNumber + '.jpg\') no-repeat center center fixed; background-size: cover; }';
+
+        window.getLevelCode = function() {
+            console.log("GetLevelCode")
+            return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;")
+        }
+
+        setTimeout(function() {
+            document.getElementById("flash").getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]))
+        }, 2500);
+    }
 });
 </script>
 
