@@ -25,9 +25,9 @@ body {
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Generate a random number between 1 and 22
-    var randomBgNumber = Math.floor(Math.random() * 22) + 1;
-    // Set the background image URL using the generated number
+    // Random number generator
+    var randomBgNumber = Math.floor(Math.random() * 23) + 1;
+    
     document.getElementById("backgroundStyle").textContent = 'body { background: url(\'bg' + randomBgNumber + '.jpg\') no-repeat center center fixed; background-size: cover; }';
     
     window.getLevelCode = function() {
