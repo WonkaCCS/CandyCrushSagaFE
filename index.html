@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.body.appendChild(errorMessage);
     } else {
         // Flash Player is supported, continue with your code
-        var randomBgNumber = Math.floor(Math.random() * 23) + 1;
+        var randomBgNumber = Math.floor(Math.random() * 22) + 1;
         document.getElementById("backgroundStyle").textContent = 'body { background: url(\'bg' + randomBgNumber + '.jpg\') no-repeat center center fixed; background-size: cover; }';
 
         window.getLevelCode = function() {
