@@ -36,47 +36,8 @@ setTimeout(function() {
 </script>
 </head>
 <body>
-<center><embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600"></center>
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
-<title>Candy Crush Custom Level!!</title>
-<style>
-body {
-    background: no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-</style>
-<script>
-function getRandomBackground() {
-    const num = Math.floor(Math.random() * 24) + 1;
-    return `bg${num}.jpg`;
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
-});
-
-window.getLevelCode = function() {
-    console.log("GetLevelCode")
-    return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;")
-}
-
-setTimeout(function() {
-    document.getElementById("flash").getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]))
-}, 2500)
-</script>
-</head>
-<body>
-<center><embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600"></center>
+<center>
+    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
+</center>
 </body>
 </html>
