@@ -24,6 +24,11 @@ body {
     padding: 20px;
     color: black; /* Set the text color to black */
 }
+.additional-info {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 20px;
+}
 </style>
 </head>
 <body>
@@ -52,12 +57,19 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     if (!hasFlash) {
-        // Flash Player not found, display alternative message
+        // Flash Player not found, display alternative message with Basilisk download link
         var errorMessage = document.createElement('div');
         errorMessage.className = 'error-message';
-        errorMessage.textContent = 'Your browser is too modern. get Basilisk to run this https://archive.org/download/basilisk-portable-with-flash/Basilisk%20Portable%20with%20Flash.zip.';
+        errorMessage.innerHTML = 'Your browser is too modern. <a href="https://archive.org/download/basilisk-portable-with-flash/Basilisk%20Portable%20with%20Flash.zip" target="_blank">Get Basilisk</a> to run this game.';
+        
+        // Additional information for users running Basilisk
+        var additionalInfo = document.createElement('div');
+        additionalInfo.className = 'additional-info';
+        additionalInfo.innerHTML = 'If you are running Basilisk and it didn\'t work, get help at our <a href="https://discord.gg/pSpFYR666b" target="_blank">Discord</a> or contact the website\'s administrators.';
+        
         document.body.innerHTML = ''; // Clear existing content
         document.body.appendChild(errorMessage);
+        document.body.appendChild(additionalInfo);
     } else {
         // Flash Player is supported, continue with your code
         var randomBgNumber = Math.floor(Math.random() * 22) + 1;
