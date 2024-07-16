@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Candy Crush Custom Level!!</title>
-<style id="backgroundStyle"></style>
-<style>
-body {
-    color: white;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-#flash {
-    width: 755px;
-    height: 600px;
-    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5);
-}
-.error-message {
-    text-align: center;
-    font-size: 24px;
-    padding: 20px;
-    color: black; /* Set the text color to black */
-}
-</style>
+    <title>Candy Crush Custom Level!!</title>
+    <style id="backgroundStyle"></style>
+    <style>
+        body {
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('') no-repeat center center fixed;
+            background-size: cover;
+        }
+        #flash {
+            width: 755px;
+            height: 600px;
+            box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5);
+        }
+        .error-message {
+            text-align: center;
+            font-size: 24px;
+            padding: 20px;
+            color: black; /* Set the text color to black */
+        }
+    </style>
 </head>
 <body>
 <noscript>
@@ -32,47 +34,50 @@ body {
         This game requires JavaScript to be enabled.
     </div>
 </noscript>
-<center><embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash"></center>
+<center>
+    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash">
+</center>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Check if Flash Player is supported
-    var hasFlash = false;
-    try {
-        var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
-        if (fo) {
-            hasFlash = true;
-        }
-    } catch (e) {
-        if (navigator.mimeTypes
-            && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined
-            && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) {
-            hasFlash = true;
-        }
-    }
-
-    if (!hasFlash) {
-        // Flash Player not found, display alternative message
-        var errorMessage = document.createElement('div');
-        errorMessage.className = 'error-message';
-        errorMessage.textContent = 'Your browser is too modern.<a href="https://archive.org/download/basilisk-portable-with-flash/Basilisk%20Portable%20with%20Flash.zip" target="_blank">Get Basilisk</a> to run this content. or contact an administrator at href="https://discord.gg/pSpFYR666b".';
-        document.body.innerHTML = ''; // Clear existing content
-        document.body.appendChild(errorMessage);
-    } else {
-        // Flash Player is supported, continue with your code
-        var randomBgNumber = Math.floor(Math.random() * 22) + 1;
-        document.getElementById("backgroundStyle").textContent = 'body { background: url(\'bg' + randomBgNumber + '.jpg\') no-repeat center center fixed; background-size: cover; }';
-
-        window.getLevelCode = function() {
-            console.log("GetLevelCode")
-            return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;")
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check if Flash Player is supported
+        var hasFlash = false;
+        try {
+            var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+            if (fo) {
+                hasFlash = true;
+            }
+        } catch (e) {
+            if (navigator.mimeTypes
+                && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined
+                && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) {
+                hasFlash = true;
+            }
         }
 
-        setTimeout(function() {
-            document.getElementById("flash").getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]))
-        }, 2500);
-    }
-});
+        if (!hasFlash) {
+            // Flash Player not found, display alternative message
+            var errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.innerHTML = 'Your browser is too modern. <a href="https://archive.org/download/basilisk-portable-with-flash/Basilisk%20Portable%20with%20Flash.zip" target="_blank">Get Basilisk</a> to run this content. or contact an administrator at <a href="https://discord.gg/pSpFYR666b">https://discord.gg/pSpFYR666b</a>.';
+            document.body.innerHTML = ''; // Clear existing content
+            document.body.appendChild(errorMessage);
+        } else {
+            // Flash Player is supported, continue with your code
+            var randomBgNumber = Math.floor(Math.random() * 22) + 1;
+            document.getElementById("backgroundStyle").textContent = 'body { background: url(\'bg' + randomBgNumber + '.jpg\') no-repeat center center fixed; background-size: cover; }';
+
+            // Function to get level code from URL query parameter
+            window.getLevelCode = function() {
+                return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
+            }
+
+            // Call the flash object's getLevelCode function after a delay
+            setTimeout(function() {
+                document.getElementById("flash").getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
+            }, 2500);
+        }
+    });
 </script>
 
 </body>
