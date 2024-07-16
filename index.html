@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Flash Player not found, display alternative message
         var errorMessage = document.createElement('div');
         errorMessage.className = 'error-message';
-        errorMessage.textContent = 'Your browser is too modern. get Basilisk to run this https://archive.org/download/basilisk-portable-with-flash/Basilisk%20Portable%20with%20Flash.zip. or contact an administrator at https://discord.gg/pSpFYR666b.';
+        errorMessage.textContent = 'Your browser is too modern.<a href="https://archive.org/download/basilisk-portable-with-flash/Basilisk%20Portable%20with%20Flash.zip" target="_blank">Get Basilisk</a> to run this content. or contact an administrator at href="https://discord.gg/pSpFYR666b".';
         document.body.innerHTML = ''; // Clear existing content
         document.body.appendChild(errorMessage);
     } else {
