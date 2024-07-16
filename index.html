@@ -26,13 +26,28 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 window.getLevelCode = function() {
-    console.log("GetLevelCode")
-    return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;")
+    console.log("GetLevelCode");
+    return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
+};
+
+function callGetLevelCode() {
+    var flashElement = document.getElementById("flash");
+    try {
+        if (flashElement && typeof flashElement.getLevelCode === "function") {
+            flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
+        } else {
+            console.error("getLevelCode is not a function on flash element");
+            setTimeout(callGetLevelCode, 100); // Retry after 100ms
+        }
+    } catch (e) {
+        console.error("Error calling getLevelCode: ", e);
+        setTimeout(callGetLevelCode, 100); // Retry after 100ms
+    }
 }
 
-setTimeout(function() {
-    document.getElementById("flash").getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]))
-}, 2500)
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(callGetLevelCode, 100);
+});
 </script>
 </head>
 <body>
