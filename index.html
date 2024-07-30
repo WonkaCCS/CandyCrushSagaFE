@@ -18,6 +18,21 @@ body {
 #flash {
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 1.0);
 }
+
+#restartButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: url('restart.png') no-repeat center center;
+    width: 50px;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+}
+
+#restartButton:active {
+    background: url('restart_pressed.png') no-repeat center center;
+}
 </style>
 <script>
 function getRandomBackground() {
@@ -49,8 +64,17 @@ function callGetLevelCode() {
     }
 }
 
+function playSound() {
+    var audio = new Audio('press.mp3');
+    audio.play();
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(callGetLevelCode, 100);
+    document.getElementById("restartButton").addEventListener("click", function() {
+        playSound();
+        setTimeout(callGetLevelCode, 100);
+    });
 });
 </script>
 </head>
@@ -58,5 +82,6 @@ document.addEventListener("DOMContentLoaded", function() {
 <center>
     <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
 </center>
+<button id="restartButton"></button>
 </body>
 </html>
