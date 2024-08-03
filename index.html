@@ -1,540 +1,107 @@
+<!DOCTYPE html>
 <html>
-    <!-- Download stuff -->
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>Level Editor</title>
-        <link rel="icon" href="logo.png">
-        <link href="style.css" rel="stylesheet" type="text/css" />
-        <script src="https://cdn.jsdelivr.net/npm/underscore@1.12.0/underscore-min.js"></script>
-        
-        <meta content="Flash Level Editor" property="og:title">
-        <meta content="Level editor for candy crush that can be used to export levels in your browser" property="og:description">
-        <meta content="Candy Crush Level Editor" property="og:site_name">
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta http-equiv="Pragma" content="no-cache" />
-        <meta http-equiv="Expires" content="0" />
-    </head>
+<head>
+<title>Candy Crush Custom Level</title>
+<style>
+body {
+    background: no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    <body>
-        <script src="script.js" defer></script>
+#flash {
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 1.0);
+}
 
-        <img src="backgrounds/w1_bg.png" id="background" draggable="false"></img>
+#restartButton,
+#shuffleButton {
+    position: absolute;
+    background-size: cover;  
+    width: 50px;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+}
 
-        <div id="main">
-            <div class="navbar">
-                <div style="display: flex; height: 105%;">
-                    <div class="navbarflex">
-                        <button onclick="document.getElementById('creditsmenu').style.display = 'block'" style="margin: auto; display: block;" onclick=""></small>Credits & Help</button>
-                        <button onclick="window.open('https://discord.gg/pSpFYR666b')" style="margin: auto; display: block;" onclick="
-                        <button onclick="window.open('https://discord.gg/pSpFYR666b')">Editor's Discord Server (Fixed)</button>
-                    </div>
-                    <div class="navbarflex">
-                    </div>
-                    <div class="navbarflex">
-                        
-                        <button style="margin: auto; display: block;" onclick="window.open('https://wonkaccs.github.io/CandyCrushSagaFE/?levelCode=' + JSON.stringify(exportLevel()), '_blank')">▶ Play Level</button>
-                        <button style="margin: auto; display: block;" onclick="window.open('https://wonkaccs.github.io/CandyCrushSagaFECanary/?levelCode=' + JSON.stringify(exportLevel()), '_blank')">▶ Play in Canary</button>
-                        
-                        <button style="margin: auto; display: block;" onclick="exportLevelUI()">⏏ Export Level</button>
-                        <button style="margin: auto; display: block;" onclick="displayImportLevelUI()"><small>⤵</small> Import Level</button>
-                    </div>
-                </div>
-            </div>
-            <div class="sideselectionright">
-                <div class="sidetitle">
-                    <p class='BananaSplit' style="font-weight: bold; color: blue; text-align: center;">Level:</p>
-                </div>
-                <div class="sideoptions" id="modeselection">
-                    <p for="moves" class='DroidSans break' style="margin: 10px; display: block; color: white; text-align: center;">Level Type:</p>
-                    <label for="movesoption" class="leveltypelabel" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_moves.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;">Moves</label> -->
-                        <input type="radio" id="movesoption" name="leveltype" value="Classic moves" checked>
-                    </label>
-                    <label class="leveltypelabel" for="jellyoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_jelly.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;">Jelly</label> -->
-                        <input type="radio" id="jellyoption" name="leveltype" value="Light up">
-                    </label>
-                    <label class="leveltypelabel" for="ingredientsoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_drop.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;">Ingredients</label> -->
-                        <input type="radio" id="ingredientsoption" name="leveltype" value="Drop down">
-                    </label>
-                    <label class="leveltypelabel" for="orderoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_order.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;">Order</label> -->
-                        <input type="radio" id="orderoption" name="leveltype" value="Order">
-                    </label>
-                    <label class="leveltypelabel" for="timedoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_time.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;">Timed</label> -->
-                        <input type="radio" id="timedoption" name="leveltype" value="Classic">
-                    </label>
-                    <label class="leveltypelabel" for="jellyorderoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_jellyorder.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;">Jelly Order</label> -->
-                        <input type="radio" id="jellyorderoption" name="leveltype" value="Jelly Order">
-                    </label>
-                    <label class="leveltypelabel" for="jellyingredientsoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_jellydrop.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;">Jelly Ingredients</label> -->
-                        <input type="radio" id="jellyingredientsoption" name="leveltype" value="Jelly Drop down">
-                    </label>
-                    <label class="leveltypelabel" for="orderingredientsoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_orderdrop.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;">Order Ingredients</label> -->
-                        <input type="radio" id="orderingredientsoption" name="leveltype" value="Order Drop">
-                    </label>
-                    <label class="leveltypelabel" for="jellytimeoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_jellytime.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;"><s>Jelly Time</s></label> -->
-                        <input type="radio" id="jellytimeoption" name="leveltype" value="Jelly Time">
-                    </label>
+#restartButton {
+    top: 20px;
+    right: 20px;
+    background: url('restart.png') no-repeat center center;
+}
 
-                    <label class="leveltypelabel" for="ordertimeoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_ordertime.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;"><s>Order Time</s></label> -->
-                        <input type="radio" id="ordertimeoption" name="leveltype" value="Order Time">
-                    </label>
+#restartButton:active {
+    background: url('restart_pressed.png') no-repeat center center;
+}
 
-                    <label class="leveltypelabel" for="droptimeoption" style="margin: 5px;" onclick="selectMode()">
-                        <img src="ui/playmode_icon_droptime.png" style="max-width: 30px; max-height: 30px;">
-                        <div class="break"></div>
-                        <!-- <label class='DroidSans' style="color: white; text-align: center;"><s>Drop Time</s></label> -->
-                        <input type="radio" id="droptimeoption" name="leveltype" value="Drop Time">
-                    </label>
-                    
+#shuffleButton {
+    top: 80px; 
+    right: 20px;
+    background: url('shuffle.png') no-repeat center center;
+}
 
+#shuffleButton:active {
+    background: url('shuffle_pressed.png') no-repeat center center;
+}
+</style>
+<script>
+function getRandomBackground() {
+    const num = Math.floor(Math.random() * 20) + 1;
+    return `bg${num}.jpg`;
+}
 
-                </div>
-                <div class="sideoptions" id="moves-section">
-                    <label for="moves" class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Moves:</label>
-                    <input style="width: 50px; text-align: center;" placeholder="15" type="number" name="moves" id="moves" name="moves"><br>
-                </div>
-                
-                <div class="sideoptions" id="time-section" style="display: none;">
-                    <label for="time" class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Time (seconds):</label>
-                    <input style="width: 50px; text-align: center;" placeholder="30" type="number" name="moves" id="time" name="time"><br>
-                </div>
-                <div class="sideoptions" id="colorspref-section">
-                    <p class='DroidSans break' style="margin: auto; display: block; color: white; text-align: center;">Preferred Colors:</p>
-                    <button value="0" class="preferred preferredselected" onclick="togglePreferred(this)">
-                        <img class="selectionimage" src="elements/blue.png">
-                    </button>
-                    <button value="1" class="preferred preferredselected" onclick="togglePreferred(this)">
-                        <img class="selectionimage" src="elements/green.png">
-                    </button>
-                    <button value="2" class="preferred preferredselected" onclick="togglePreferred(this)">
-                        <img class="selectionimage" src="elements/orange.png">
-                    </button>
-                    <button value="3" class="preferred preferredselected" onclick="togglePreferred(this)">
-                        <img class="selectionimage" src="elements/purple.png">
-                    </button>
-                    <button value="4" class="preferred preferredselected" onclick="togglePreferred(this)">
-                        <img class="selectionimage" src="elements/red.png">
-                    </button>
-                    <button value="5" class="preferred" onclick="togglePreferred(this)">
-                        <img class="selectionimage" src="elements/yellow.png">
-                    </button>
-                </div>
+document.addEventListener("DOMContentLoaded", function() {
+    document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
+});
 
-                
-                <div class="sideoptions">
-                    <p class='DroidSans break' style="margin: 10px; display: block; color: white; text-align: center;">Score Targets:</p>
-                    <img src="ui/hud/hud_scoreStar_red.png" style="max-width: 30px; max-height: 30px;"> 
-                    <p class="DroidSans" style="margin: 10px; display: block; color: white; text-align: center;">Star 1:</p> 
-                    <input style="width: fit-content; text-align: center;" placeholder="1000" type="number" id="star1">
-                    <div class="break"></div> 
-                    <img src="ui/hud/hud_scoreStar_green.png" style="max-width: 30px; max-height: 30px;"> 
-                    <p class="DroidSans" style="margin: 10px; display: block; color: white; text-align: center;">Star 2:</p> 
-                    <input style="width: fit-content; text-align: center;" placeholder="2000" type="number" id="star2">
-                    <div class="break"></div> 
-                    <img src="ui/hud/hud_scoreStar_yellow.png" style="max-width: 30px; max-height: 30px;"> 
-                    <p class="DroidSans" style="margin: 10px; display: block; color: white; text-align: center;">Star 3:</p> 
-                    <input style="width: fit-content; text-align: center;" placeholder="3000" type="number" id="star3">
-                </div>
+window.getLevelCode = function() {
+    console.log("GetLevelCode");
+    return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
+};
 
+function callGetLevelCode() {
+    var flashElement = document.getElementById("flash");
+    try {
+        if (flashElement && typeof flashElement.getLevelCode === "function") {
+            flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
+        } else {
+            console.error("getLevelCode is not a function on flash element");
+            setTimeout(callGetLevelCode, 100); // Retry after 100ms
+        }
+    } catch (e) {
+        console.error("Error calling getLevelCode: ", e);
+        setTimeout(callGetLevelCode, 100); // Retry after 100ms
+    }
+}
 
-                <div class="sideoptions">
-                    <label for="moves" class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Disable Starting Boosters:</label>
-                    <input style="text-align: center;" type="checkbox" name="disablebooster" id="disablebooster">
-                </div>
+function playSound() {
+    var audio = new Audio('press.mp3');
+    audio.play();
+}
 
-                <div class="sidetitle">
-                    <p class='BananaSplit' style="font-weight: bold; text-align: center; color: blueviolet;">Dreamworld:</p>
-                </div>
-                <div class="sideoptions">
-                    <label for="isOwlModeEnabled" class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Dreamworld Level?</label>
-                    <input style="text-align: center;" type="checkbox" name="isOwlModeEnabled" id="isOwlModeEnabled" onchange="toggleDreamworld(this)">
-                </div>
-                <div class="sideoptions" id="dreamworldoptions" style="display: none;">
-                    <label for="initialMovesUntilMoonStruck" class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Moves Until Moonstruck</label>
-                    <input style="width: 50px; text-align: center;" type="number" name="initialMovesUntilMoonStruck" id="initialMovesUntilMoonStruck" placeholder="5">
-                    <label for="initialMovesDuringMoonStruck"  class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Moonstruck Length</label>
-                    <input style="width: 50px; text-align: center;" type="number" name="initialMovesDuringMoonStruck" id="initialMovesDuringMoonStruck" placeholder="3">
-                    <label for="maxAllowedScaleDiff"  class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Max Scale Difference</label>
-                    <input style="width: 50px; text-align: center;" type="number" name="maxAllowedScaleDiff" id="maxAllowedScaleDiff" placeholder="10">
-                </div>
-                <div id="requirements-options-section" style="display: none;">
-                    <div class="sidetitle">
-                        <p class='BananaSplit' style="font-weight: bold; color: white; text-align: center;">Requirements:</p>
-                    </div>
-                    <div class="sidetitle" style="display: flex;">
-                        <button style="margin-right: auto; margin-left: auto; display: block; height: fit-content;" onclick="addRequirement()" id="addorder">Add Order</button>
-                        <button style="margin-right: auto; margin-left: auto; display: block; height: fit-content;" onclick="addRequirement(true)" id="addingredient">Add Ingredient</button>
-                    </div>
-                    <div style="min-height: 40px; display: none;" id="requirementwarning">
-                        <p class='DroidSans' style="font-weight: bold; color: red; text-align: center;">You can only have 3 requirements at a time.</p>
-                    </div>
-                    <div id="requirements">
-                    </div>
-                </div>
-                <div class="sidetitle">
-                    <p class='BananaSplit' style="font-weight: bold; color: white; text-align: center;">Candy Cannon:</p>
-                </div>
-                <div class="sideoptions">
-                    <table style="width: 100%;" class="cannonsettings">
-                        <tr>
-                            <td>
-                                <!-- <p class='BananaSplit' style="font-weight: bold; color: white; text-align: center;">Amount:</p> -->
-                            </td>
-                            <td>
-                                <p class='BananaSplit' style="font-weight: bold; color: white; text-align: center;">Max:</p>
-                            </td>
-                            <td>
-                                <p class='BananaSplit' style="font-weight: bold; color: white; text-align: center;">Interval:</p>
-                            </td>
-                            <td>
-                                <p class='BananaSplit' style="font-weight: bold; color: white; text-align: center;">Tick:</p>
-                            </td>
-                        </tr>
-                        <tr class="cannonpref" elm="licorice" image="elements/cannon_licorice.png" tick=""></tr>
-                        <tr class="cannonpref" elm="luckyCandy" image="elements/cannon_lucky.png" tick=""></tr>
-                        <tr class="cannonpref" elm="mysteryCandy" image="elements/cannon_mystery.png" tick=""></tr>
-                        <tr class="cannonpref" elm="mulockCandy" image="elements/cannon_mulock_key.png" tick=""></tr>
-                        <tr class="cannonpref" elm="pepperCandy" image="elements/cannon_bomb.png" tick="ExplosionTurns"></tr>
-                        <tr class="cannonpref" elm="timeCandy" image="elements/cannon_time_candy.png" tick=""></tr>
-                        <tr class="cannonpref" elm="chameleonCandy" image="elements/chameleon.png" tick=""></tr>
-                        <tr>
-                            <td> 
-                                <img class="elmimg" style="max-width: 70%;" src="elements/cannon_ingredient.png"> 
-                            </td> 
-                            <td> 
-                                <input class="max" style="width: 50px; text-align: center;" placeholder="0" type="number" id="maxNumIngredientsOnScreen">
-                             </td> 
-                             <td> 
-                                 <input class="spawn" style="width: 50px; text-align: center;" placeholder="0" type="number" id="ingredientSpawnDensity"> 
-                                </td> 
-                                <td> 
-                                    <!-- <input class="tick" style="width: 50px; text-align: center;" placeholder="0" type="number" id="shieldLevel">  -->
-                                </td>
-                        </tr>
-                    </table>
-                </div>
-
-
-                <div id="mixer-options-section" style="display: block;">
-                    <div class="sidetitle">
-                        <p class="BananaSplit" style="font-weight: bold; color: white; text-align: center;">Mixer Options:</p>
-                    </div>
-                    <div>
-                        <p class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Max Blockers:</p>
-                        <input type="number" style="margin-left: 40%; width: 20%; text-align: center;" id="evilSpawnerAmount" placeholder="0" title="Max Spawned Blockers">
-                        <div class="break"></div>
-                        <p class='DroidSans' style="margin: 10px; display: block; color: white; text-align: center;">Spawn Interval:</p>
-                        <input type="number" style="margin-left: 40%; width: 20%; text-align: center;"" id="evilSpawnerInterval" placeholder="0" title="Spawn Interval">
-                        <div class="break"></div>
-                        <button style="margin-right: auto; margin-left: auto; display: block; height: fit-content;" onclick="addMixerOption()" id="addmixer">Add Mixer Blocker</button>
-                    </div>
-                    <div id="mixeroptions">
-                    </div>
-                </div>
-            </div>
-
-            <div class="sideselection">
-                <div class="buttons">
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="colordrop">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Colors</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="colordrop" style="display:none">
-                        <button class="colorselected" onclick="updateColor(this, 'random')">
-                            <img class="selectionimage" src="elements/random_ui.png">
-                        </button>
-                        <div class="selectcolor" color="red"></div>
-                        <div class="selectcolor" color="yellow"></div>
-                        <div class="selectcolor" color="blue"></div>
-                        <div class="selectcolor" color="green"></div>
-                        <div class="selectcolor" color="orange"></div>
-                        <div class="selectcolor" color="purple"></div>
-                    </div>
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="candy">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Candy</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="candy" style="display:none">
-                        <button class="elementselected" onclick="updateSelection(this, 'random', 'normal')">
-                            <img class="selectionimage" src="elements/random.png">
-                        </button>
-                        <div class="selectcoloredelement" element="striped_horizontal"></div>
-                        <div class="selectcoloredelement" element="striped_vertical"></div>
-                        <div class="selectcoloredelement" element="wrapped"></div>
-                        <div class="selectcoloredelement" element="pepper_candy"></div>
-                        <div class="selectcoloredelement" element="key"></div>
-                        <div class="selectcoloredelement" element="lucky"></div>
-                        <div class="selectcoloredelement" element="mystery"></div>
-                        <div class="selectcoloredelement" element="chameleon"></div>
-                        <div class="selectcoloredelement" element="extra_time_and_moves"></div>
-                        <div class="selectcoloredelement" element="jellyfish"></div>
-                        <div class="selectelement" element="bomb", gamelayer="normal"></div>
-                        <div class="selectelement" element="coconut_wheel", gamelayer="normal"></div>
-                        <div class="selectelement" element="ufo", gamelayer="normal"></div>
-                    </div>
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="frogss">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Frog</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-
-       
-                    </button>
-                    <div class="dropped" id="frogss" style="display:none">
-                        <div class="selectcoloredelement" element="frog"></div>
-                        <div class="selectelement" element="chocolate_frog" gamelayer="normal"></div>
-                        <div class="selectelement" element="leaf" gamelayer="leaf"></div>
-                    </div>
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="tiles">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Tiles</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="tiles" style="display:none">
-                        <button onclick="updateSelection(this, 'none', 'tile')">
-                            <img class="selectionimage" src="elements/none_UI.png">
-                        </button>
-                        <button onclick="updateSelection(this, 'empty', 'tile')">
-                            <img class="selectionimage" src="elements/empty_UI.png">
-                        </button>
-                        <div class="selectelement" element="grid" gamelayer="tile"></div>
-                        <div class="selectelement" element="jelly" gamelayer="tile"></div>
-                        <div class="selectelement" element="jelly2" gamelayer="tile"></div>
-                        <div class="selectelement" element="blue_tile" gamelayer="tile"></div>
-                        <div class="selectelement" element="black_tile" gamelayer="tile"></div>
-                    </div>
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="blockers">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Blockers</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="blockers" style="display:none">
-                        <div class="selectelement" element="block_frosting" gamelayer="normal"></div>
-                        <div class="selectelement" element="block_multi_frosting1" gamelayer="normal"></div>
-                        <div class="selectelement" element="block_multi_frosting2" gamelayer="normal"></div>
-                        <div class="selectelement" element="block_multi_frosting3" gamelayer="normal"></div>
-                        <div class="selectelement" element="block_multi_frosting4" gamelayer="normal"></div>
-                        <div class="selectelement" element="block_multi_frosting5" gamelayer="normal"></div>
-                        <div class="selectelement" element="chocolate" gamelayer="normal"></div>
-                        <div class="selectelement" element="licorice_square" gamelayer="normal"></div>
-                        <div class="selectelement" element="bobber", gamelayer="normal"></div>
-                        <div class="selectelement" element="cake_bomb" gamelayer="normal"></div>
-                        <div class="selectelement" element="shell_1" gamelayer="normal"></div>
-                        <div class="selectelement" element="crystallized_licorice" gamelayer="normal"></div>
-                        <div class="selectelement" element="bubble_pop_1" gamelayer="normal"></div>
-                        <div class="selectelement" element="bubble_pop_2" gamelayer="normal"></div>
-                        <div class="selectelement" element="bubble_pop_3" gamelayer="normal"></div>
-                        <div class="selectelement" element="bubble_pop_4" gamelayer="normal"></div>
-                        <div class="selectelement" element="bubble_pop_5" gamelayer="normal"></div>
-                        <div class="selectelement" element="adjecent_bobber" gamelayer="normal"></div>
-                        <div class="selectelement" element="mystery_blocker" gamelayer="normal"></div>
-                        <div class="selectelement" element="static_licorice_1" gamelayer="normal"></div>
-                        <div class="selectelement" element="static_licorice_2" gamelayer="normal"></div>
-                        <div class="selectelement" element="static_licorice_3" gamelayer="normal"></div>
-                        <div class="selectelement" element="static_licorice_4" gamelayer="normal"></div>
-                        <div class="selectelement" element="static_licorice_5" gamelayer="normal"></div>
-                        <div class="selectelement" element="layered_mystery_1" gamelayer="normal"></div>
-                        <div class="selectelement" element="layered_mystery_2" gamelayer="normal"></div>
-                        <div class="selectelement" element="layered_mystery_3" gamelayer="normal"></div>
-                        <div class="selectelement" element="blue_fizz_1" gamelayer="normal"></div>
-                        <div class="selectelement" element="blue_fizz_2" gamelayer="normal"></div>
-                        <div class="selectelement" element="blue_fizz_3" gamelayer="normal"></div>
-                        <div class="selectelement" element="blue_fizz_4" gamelayer="normal"></div>
-                        <div class="selectelement" element="summer_fizz_1" gamelayer="normal"></div>
-                        <div class="selectelement" element="summer_fizz_2" gamelayer="normal"></div>
-                        <div class="selectelement" element="summer_fizz_3" gamelayer="normal"></div>
-                        <div class="selectelement" element="summer_fizz_4" gamelayer="normal"></div>
-
-                    </div>
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="indicator">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Direction Indicators</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="indicator" style="display:none">
-                        <div class="selectelement" element="up_indicator" gamelayer="Indicators"></div>
-                        <div class="selectelement" element="down_indicator" gamelayer="Indicators"></div>
-                        <div class="selectelement" element="right_indicator" gamelayer="Indicators"></div>
-                        <div class="selectelement" element="left_indicator" gamelayer="Indicators"></div>
-                        <div class="selectelement" element="horizontal_indicator" gamelayer="Indicators"></div>
-                        <div class="selectelement" element="vertical_indicator" gamelayer="Indicators"></div>
-                    </div>
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="notes">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Notes</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="notes" style="display:none">
-                        <div class="selectelement" element="blocker_note" gamelayer="notes"></div>
-                        <div class="selectelement" element="portal_entry_note" gamelayer="entry_note"></div>
-                        <div class="selectelement" element="portal_exit_note" gamelayer="exit_note"></div>
-                    </div>
-    
-                    
-
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="locks">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Locks</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="locks" style="display:none">
-                        <div class="selectelement" element="licorice" gamelayer="lock"></div>
-                        <div class="selectelement" element="marmalade" gamelayer="lock"></div>
-                        <div class="selectelement" element="mulock1" gamelayer="lock"></div>
-                        <div class="selectelement" element="mulock2" gamelayer="lock"></div>
-                        <div class="selectelement" element="mulock3" gamelayer="lock"></div>
-                        <div class="selectelement" element="mulock4" gamelayer="lock"></div>
-                        <div class="selectelement" element="mulock5" gamelayer="lock"></div>
-                    </div>
-
-
-
-
-
-                    
-
-
-
-
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="spawning">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Candy Cannon</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="spawning" style="display:none">
-                        <div class="selectelement" element="candy_cannon" gamelayer="candy_cannon"></div>
-                        <div class="selectelement" element="candy_entrance" gamelayer="candy_entrance"></div>
-                        <div class="selectelement" element="cannon_ingredient" gamelayer="candy_cannon"></div>
-                        <div class="selectelement" element="cannon_licorice" gamelayer="candy_cannon"></div>
-                        <div class="selectelement" element="cannon_bomb" gamelayer="candy_cannon"></div>
-                        <div class="selectelement" element="cannon_mulock_key" gamelayer="candy_cannon"></div>
-                        <div class="selectelement" element="cannon_lucky" gamelayer="candy_cannon"></div>
-                        <div class="selectelement" element="cannon_mystery" gamelayer="candy_cannon"></div>
-                        <div class="selectelement" element="cannon_chameleon" gamelayer="candy_cannon"></div>
-                        <div class="selectelement" element="cannon_extra_time_and_moves" gamelayer="candy_cannon"></div>
-                    </div>
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="ingredients">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Ingredients</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="ingredients" style="display:none">
-                        <div class="selectelement" element="cherry" gamelayer="normal"></div>
-                        <div class="selectelement" element="ingredients_exit" gamelayer="ingredients_exit"></div>
-                    </div>
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="mixers">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Mixers</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="mixers" style="display:none">
-                        <div class="selectelement" element="chocolate_spawner" gamelayer="normal"></div>
-                        <div class="selectelement" element="magic_mixer" gamelayer="normal"></div>
-                    </div>
-
-                    <button class="dropdown" onclick="toggleDropdown(this)" associd="portals">
-                        <div style="display: flex; justify-content: space-between;">
-                            <p class='BananaSplit' style="padding-left: 5%; ">Portals</p>
-                            <p class="arrow" style="display: inline; padding-right: 5%; transform: rotate(90deg);">&raquo</p>
-                          </div>
-                    </button>
-                    <div class="dropped" id="portals" style="display:none">
-                        <div class="selectelement" element="portal_entrance" gamelayer="portal_entrance"></div>
-                        <div class="selectelement" element="portal_entrance_hidden" gamelayer="portal_entrance"></div>
-                        <!--<div class="selectelement" element="portal_exit" gamelayer="portal_exit"></div>
-                        <div class="selectelement" element="portal_exit_hidden" gamelayer="portal_exit"></div>-->
-                    </div>
-                </div>
-            </div>
-
-            <div class="vertical-center" width="100px" style="top:56%">
-                <table id="level" cellspacing="0"></table>
-            </div>
-        </div>
-
-        <div id="exportmenu" style="display: none;">
-            <div class="popup">
-                <button onclick="document.getElementById('exportmenu').style.display = 'none'" style="position: absolute; right: 20px; top: 20px; border-radius: 0px; background-color: rgb(174, 174, 174); width: 30px; height: 30px;">X</button>
-                <label for="exportfield" class="BananaSplit" style="margin: 0; width: 50%; height: 25px; border-radius: 0px; background-color: #353535; padding: 10; display: block; color: white; text-align: center;">Exported Data:</label>
-                <!-- Removed 'readonly' attribute from textarea -->
-                <textarea id="exportfield" name="exportfield" style="background-color: #464646; border: 2px solid #353535; width: 90%; height: 70%; resize: none; color: white;"></textarea>
-            </div>
-        </div>
-        
-        <div id="importmenu" style="display: none;">
-            <div class="popup" style="width: 30%; left: 35%;">
-                <button onclick="document.getElementById('importmenu').style.display = 'none'" style="position: absolute; right: 20; top: 20; border-radius: 0px; background-color: rgb(174, 174, 174); width: 30px; height: 30px">X</button>
-                <label for="importfield" class='BananaSplit' style="margin: 0; width: 50%; height: 20px; border-radius: 0px; background-color: #353535; padding:0; display: block; color: white; text-align: center;">Waiting for level code...</label>
-                <div class="break"></div>
-                <textarea id="importfield" name="importfield" style="background-color: #464646; border: 2px solid #353535; width: 70%; height: 70%; resize: none; color: white;"></textarea>
-                <div class="break"></div>
-                <button onclick="importLevelUI()" style="border-radius: 0px; background-color: rgb(174, 174, 174); width: 30%; font-size: 1.1em;">Import Level</button>
-                <div class="break"></div>
-                <p class="BananaSplit" id="importerror" style="color: red; display: none; width: fit-content; height: fit-content;">Error: bruh</p>
-            </div>
-        </div>
-        <div id="creditsmenu" style="display: none;">
-            <div class="popup" style="height: 70%">
-                <button onclick="document.getElementById('creditsmenu').style.display = 'none'" style="position: absolute; right: 20; top: 20; border-radius: 0px; background-color: rgb(174, 174, 174); width: 30px; height: 30px">X</button>
-                <p class='BananaSplit' style="margin: 0; width: 50%; height: 20px; border-radius: 0px; background-color: #353535; padding:0; display: block; color: white; text-align: center;">Candy Crush Level Editor Credits:</p>
-                <p class="BananaSplit" style="color: lightcoral; width: fit-content; height: fit-content; text-align: center;">All right go to King Limited. <br>This editor is running: Version 1.6 Build 5600 Flash Edition</p>
-                <p class="DroidSans" style="color:honeydew; width: 80%; text-align: center; vertical-align: middle; background-color: #353535;  border-radius: 0px; display: inline-block;"><br>This editor was made by Blaki, Fence, Ender_Pearl and Wonka. You may feel free to fork it and do what you like with it as long as you credit me and King. <br><br>To use blockers, use the pink sticky note at the end of the blockers section for every static blocker. This does not include Licorice Swirls and Locks. <br><br>To use Candy Cannons you need to know that the Maximum means the maximum amount of items there can be on the board. The Interval means that if you reached the maximum, and let's say the interval is two, the game will spawn another single unit of that item after two moves.<br>To use teleporters, place a pink teleporter note on the exit teleporter and a blue one on the entry teleporter.<br>ㅤ</p>
-                <div class="break"></div>
-                <div class="break"></div>
-                <p style="color:navajowhite; width: 80%; text-align: center;">Come join the server to share your levels!</p>
-                <button onclick="window.open('https://discord.gg/ZrKGprP7wp')">Candy Crush Custom Levels Hub</button>
-                <div class="break"></div>
-                
-            </div>
-        </div>
-    </body>
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(callGetLevelCode, 100);
+    document.getElementById("restartButton").addEventListener("click", function() {
+        playSound();
+        setTimeout(callGetLevelCode, 100);
+    });
+    document.getElementById("shuffleButton").addEventListener("click", function() {
+        playSound();
+        setTimeout(callGetLevelCode, 100);
+    });
+});
+</script>
+</head>
+<body>
+<center>
+    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
+</center>
+<button id="restartButton"></button>
+<button id="shuffleButton"></button>
+</body>
+</html>
