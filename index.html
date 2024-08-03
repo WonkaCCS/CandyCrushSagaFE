@@ -19,11 +19,9 @@ body {
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 1.0);
 }
 
-#restartButton {
+#restartButton,
+#shuffleButton {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: url('restart.png') no-repeat center center;
     background-size: cover;
     width: 50px;
     height: 50px;
@@ -31,9 +29,24 @@ body {
     cursor: pointer;
 }
 
+#restartButton {
+    top: 20px;
+    right: 20px;
+    background: url('restart.png') no-repeat center center;
+}
+
 #restartButton:active {
     background: url('restart_pressed.png') no-repeat center center;
-    background-size: cover;
+}
+
+#shuffleButton {
+    top: 80px; /* Adjust this value to position the button below the restart button */
+    right: 20px;
+    background: url('shuffle.png') no-repeat center center;
+}
+
+#shuffleButton:active {
+    background: url('shuffle_pressed.png') no-repeat center center;
 }
 </style>
 <script>
@@ -77,6 +90,10 @@ document.addEventListener("DOMContentLoaded", function() {
         playSound();
         setTimeout(callGetLevelCode, 100);
     });
+    document.getElementById("shuffleButton").addEventListener("click", function() {
+        playSound();
+        setTimeout(callGetLevelCode, 100);
+    });
 });
 </script>
 </head>
@@ -85,5 +102,6 @@ document.addEventListener("DOMContentLoaded", function() {
     <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
 </center>
 <button id="restartButton"></button>
+<button id="shuffleButton"></button>
 </body>
 </html>
