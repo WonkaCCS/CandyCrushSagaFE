@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Candy Crush Custom Level!!</title>
+<title>Candy Crush Custom Level</title>
 <style>
 body {
     background: no-repeat center center fixed;
@@ -22,7 +22,7 @@ body {
 #restartButton,
 #shuffleButton {
     position: absolute;
-    background-size: contain; /* Ensure the whole image fits within the button */
+    background-size: 100% 100%;  
     width: 50px;
     height: 50px;
     border: none;
@@ -40,7 +40,7 @@ body {
 }
 
 #shuffleButton {
-    top: 80px;
+    top: 80px; 
     right: 20px;
     background: url('shuffle.png') no-repeat center center;
 }
@@ -71,11 +71,11 @@ function callGetLevelCode() {
             flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
         } else {
             console.error("getLevelCode is not a function on flash element");
-            setTimeout(callGetLevelCode, 1); // Retry after 1ms
+            setTimeout(callGetLevelCode, 100); // Retry after 100ms
         }
     } catch (e) {
         console.error("Error calling getLevelCode: ", e);
-        setTimeout(callGetLevelCode, 1); // Retry after 100ms
+        setTimeout(callGetLevelCode, 100); // Retry after 100ms
     }
 }
 
@@ -85,14 +85,14 @@ function playSound() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(callGetLevelCode, 1);
+    setTimeout(callGetLevelCode, 100);
     document.getElementById("restartButton").addEventListener("click", function() {
         playSound();
-        setTimeout(callGetLevelCode, 1);
+        setTimeout(callGetLevelCode, 100);
     });
     document.getElementById("shuffleButton").addEventListener("click", function() {
         playSound();
-        setTimeout(callGetLevelCode, 1);
+        setTimeout(callGetLevelCode, 100);
     });
 });
 </script>
