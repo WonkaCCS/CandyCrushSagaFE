@@ -22,7 +22,7 @@ body {
 #restartButton,
 #shuffleButton {
     position: absolute;
-    background-size: cover;
+    background-size: contain; /* Ensure the whole image fits within the button */
     width: 50px;
     height: 50px;
     border: none;
@@ -40,7 +40,7 @@ body {
 }
 
 #shuffleButton {
-    top: 80px; /* Adjust this value to position the button below the restart button */
+    top: 80px;
     right: 20px;
     background: url('shuffle.png') no-repeat center center;
 }
@@ -71,11 +71,11 @@ function callGetLevelCode() {
             flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
         } else {
             console.error("getLevelCode is not a function on flash element");
-            setTimeout(callGetLevelCode, 100); // Retry after 100ms
+            setTimeout(callGetLevelCode, 1); // Retry after 1ms
         }
     } catch (e) {
         console.error("Error calling getLevelCode: ", e);
-        setTimeout(callGetLevelCode, 100); // Retry after 100ms
+        setTimeout(callGetLevelCode, 1); // Retry after 100ms
     }
 }
 
@@ -85,14 +85,14 @@ function playSound() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(callGetLevelCode, 100);
+    setTimeout(callGetLevelCode, 1);
     document.getElementById("restartButton").addEventListener("click", function() {
         playSound();
-        setTimeout(callGetLevelCode, 100);
+        setTimeout(callGetLevelCode, 1);
     });
     document.getElementById("shuffleButton").addEventListener("click", function() {
         playSound();
-        setTimeout(callGetLevelCode, 100);
+        setTimeout(callGetLevelCode, 1);
     });
 });
 </script>
