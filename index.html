@@ -22,31 +22,34 @@ body {
 #restartButton,
 #shuffleButton {
     position: absolute;
-    background-size: cover;  
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     width: 50px;
     height: 50px;
     border: none;
     cursor: pointer;
+    background-color: transparent; /* Ensure button background is transparent */
 }
 
 #restartButton {
     top: 20px;
     right: 20px;
-    background: url('restart.png') no-repeat center center;
+    background-image: url('restart.png');
 }
 
 #restartButton:active {
-    background: url('restart_pressed.png') no-repeat center center;
+    background-image: url('restart_pressed.png');
 }
 
 #shuffleButton {
     top: 80px; 
     right: 20px;
-    background: url('shuffle.png') no-repeat center center;
+    background-image: url('shuffle.png');
 }
 
 #shuffleButton:active {
-    background: url('shuffle_pressed.png') no-repeat center center;
+    background-image: url('shuffle_pressed.png');
 }
 </style>
 <script>
