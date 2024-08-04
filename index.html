@@ -87,6 +87,12 @@ function playSound() {
     audio.play();
 }
 
+function getUrlsFromFile() {
+    return fetch('urls.txt')
+        .then(response => response.text())
+        .then(text => text.split('\n').map(url => url.trim()).filter(url => url));
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(callGetLevelCode, 100);
     document.getElementById("restartButton").addEventListener("click", function() {
@@ -95,7 +101,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     document.getElementById("shuffleButton").addEventListener("click", function() {
         playSound();
-        setTimeout(callGetLevelCode, 100);
+        getUrlsFromFile().then(urls => {
+            if (urls.length > 0) {
+                const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+                window.location.href = randomUrl;
+            } else {
+                console.error('No URLs found in the file.');
+            }
+        }).catch(error => console.error('Error reading URLs file:', error));
     });
 });
 </script>
