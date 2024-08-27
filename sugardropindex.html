@@ -57,11 +57,11 @@ body {
 #sugarDropButton {
     top: 140px;
     right: 20px;
-    background-image: url('enable_sugardrops.png');
+    background-image: url('disable_sugar_drops.png');
 }
 
 #sugarDropButton:active {
-    background-image: url('enable_sugardrops_pressed.png');
+    background-image: url('disable_sugardrops_pressed.png');
 }
 
 #editorButton {
@@ -132,8 +132,8 @@ function getUrlsFromFile() {
 function enableSugarDrops() {
     playSound();
     let currentUrl = window.location.href;
-    if (!currentUrl.includes('/sugardropindex.html')) {
-        const newUrl = currentUrl.replace('?', 'sugardropindex.html?');
+    if (currentUrl.includes('sugardropindex.html')) {
+        const newUrl = currentUrl.replace('sugardropindex.html', '');
         window.location.href = newUrl;
     }
 }
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </head>
 <body>
 <center>
-    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
+    <embed id="flash" src="SugarDrop_loader.swf" type="application/x-shockwave-flash" width="755" height="600">
 </center>
 <button id="restartButton"></button>
 <button id="shuffleButton"></button>
