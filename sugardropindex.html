@@ -88,8 +88,9 @@ function decodeLevelCode() {
     }
     return null;
 }
-// change
-
+document.addEventListener("DOMContentLoaded", function() {
+    document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
+// wq
 window.getLevelCode = function() {
     console.log("GetLevelCode");
     return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
