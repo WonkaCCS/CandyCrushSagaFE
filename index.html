@@ -1,177 +1,204 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Candy Crush Custom Level</title>
-<style>
-body {
-    background: no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#flash {
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 1.0);
-}
-
-#restartButton,
-#shuffleButton,
-#sugarDropButton,
-#editorButton {
-    position: absolute;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 50px;
-    height: 50px;
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
-}
-
-#restartButton {
-    top: 20px;
-    right: 20px;
-    background-image: url('restart.png');
-}
-
-#restartButton:active {
-    background-image: url('restart_pressed.png');
-}
-
-#shuffleButton {
-    top: 80px;
-    right: 20px;
-    background-image: url('shuffle.png');
-}
-
-#shuffleButton:active {
-    background-image: url('shuffle_pressed.png');
-}
-
-#sugarDropButton {
-    top: 140px;
-    right: 20px;
-    background-image: url('enable_sugardrops.png');
-}
-
-#sugarDropButton:active {
-    background-image: url('enable_sugardrops_pressed.png');
-}
-
-#editorButton {
-    top: 200px;
-    right: 20px;
-    background-image: url('editor.png');
-}
-
-#editorButton:active {
-    background-image: url('editor_pressed.png');
-}
-</style>
-<script>
-function getRandomBackground() {
-    const num = Math.floor(Math.random() * 20) + 1;
-    return `bg${num}.jpg`;
-}
-
-function decodeLevelCode() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const levelCode = urlParams.get('levelCode');
-    if (levelCode) {
-        return decodeURIComponent(levelCode);
-    }
-    return null;
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
-
-    const decodedLevelCode = decodeLevelCode();
-    if (decodedLevelCode && decodedLevelCode.includes('"enableSugarTrack":true')) {
-        enableSugarDrops();
-    }
-});
-
-window.getLevelCode = function() {
-    console.log("GetLevelCode");
-    return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
-};
-
-function callGetLevelCode() {
-    var flashElement = document.getElementById("flash");
-    try {
-        if (flashElement && typeof flashElement.getLevelCode === "function") {
-            flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
-        } else {
-            console.error("getLevelCode is not a function on flash element");
-            setTimeout(callGetLevelCode, 100); // Retry after 100ms
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Crush Custom Level</title>
+    <style>
+        body {
+            background: no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-    } catch (e) {
-        console.error("Error calling getLevelCode: ", e);
-        setTimeout(callGetLevelCode, 100); // Retry after 100ms
-    }
-}
 
-function playSound() {
-    var audio = new Audio('press.mp3');
-    audio.play();
-}
+        #flash {
+            box-shadow: 0px 0px 25px rgba(0, 0, 0, 1.0);
+        }
 
-function getUrlsFromFile() {
-    return fetch('urls.txt')
-        .then(response => response.text())
-        .then(text => text.split('\n').map(url => url.trim()).filter(url => url));
-}
+        #restartButton,
+        #shuffleButton,
+        #sugarDropButton,
+        #editorButton {
+            position: absolute;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 50px;
+            height: 50px;
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+        }
 
-function enableSugarDrops() {
-    playSound();
-    let currentUrl = window.location.href;
-    if (!currentUrl.includes('/sugardropindex.html')) {
-        const newUrl = currentUrl.replace('?', 'sugardropindex.html?');
-        window.location.href = newUrl;
-    }
-}
+        #restartButton {
+            top: 20px;
+            right: 20px;
+            background-image: url('restart.png');
+        }
 
-function redirectToEditor() {
-    playSound();
-    window.location.href = 'https://wonkaccs.github.io/CandyCrushSagaEditorFE/';
-}
+        #restartButton:active {
+            background-image: url('restart_pressed.png');
+        }
 
-document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(callGetLevelCode, 100);
-    document.getElementById("restartButton").addEventListener("click", function() {
-        playSound();
-        setTimeout(callGetLevelCode, 100);
-    });
-    document.getElementById("shuffleButton").addEventListener("click", function() {
-        playSound();
-        getUrlsFromFile().then(urls => {
-            if (urls.length > 0) {
-                const randomUrl = urls[Math.floor(Math.random() * urls.length)];
-                window.location.href = randomUrl;
-            } else {
-                console.error('No URLs found in the file.');
+        #shuffleButton {
+            top: 80px;
+            right: 20px;
+            background-image: url('shuffle.png');
+        }
+
+        #shuffleButton:active {
+            background-image: url('shuffle_pressed.png');
+        }
+
+        #sugarDropButton {
+            top: 140px;
+            right: 20px;
+            background-image: url('enable_sugardrops.png');
+        }
+
+        #sugarDropButton:active {
+            background-image: url('enable_sugardrops_pressed.png');
+        }
+
+        #editorButton {
+            top: 200px;
+            right: 20px;
+            background-image: url('editor.png');
+        }
+
+        #editorButton:active {
+            background-image: url('editor_pressed.png');
+        }
+    </style>
+    <script>
+        function detectFlash() {
+            let hasFlash = false;
+
+            if (navigator.plugins && navigator.plugins.length > 0) {
+                hasFlash = !!navigator.plugins["Shockwave Flash"];
+            } else if (typeof ActiveXObject !== "undefined") {
+                try {
+                    let flash = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+                    if (flash) {
+                        hasFlash = true;
+                    }
+                } catch (e) {
+                    hasFlash = false;
+                }
             }
-        }).catch(error => console.error('Error reading URLs file:', error));
-    });
-    document.getElementById("sugarDropButton").addEventListener("click", enableSugarDrops);
-    document.getElementById("editorButton").addEventListener("click", redirectToEditor);
-});
-</script>
+
+            if (!hasFlash) {
+                alert("Flash Player is not detected. Please use the Basilisk browser for the best experience.");
+                window.location.href = "https://drive.google.com/file/d/1lurHEr4VpWJPhsBiPyUAmjrqNmU0Axwv/view";
+            }
+        }
+
+        function getRandomBackground() {
+            const num = Math.floor(Math.random() * 20) + 1;
+            return `bg${num}.jpg`;
+        }
+
+        function decodeLevelCode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const levelCode = urlParams.get('levelCode');
+            if (levelCode) {
+                return decodeURIComponent(levelCode);
+            }
+            return null;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            detectFlash();
+
+            document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
+
+            const decodedLevelCode = decodeLevelCode();
+            if (decodedLevelCode && decodedLevelCode.includes('"enableSugarTrack":true')) {
+                enableSugarDrops();
+            }
+        });
+
+        window.getLevelCode = function () {
+            console.log("GetLevelCode");
+            return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"", "&quot;");
+        };
+
+        function callGetLevelCode() {
+            var flashElement = document.getElementById("flash");
+            try {
+                if (flashElement && typeof flashElement.getLevelCode === "function") {
+                    flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
+                } else {
+                    console.error("getLevelCode is not a function on flash element");
+                    setTimeout(callGetLevelCode, 100);
+                }
+            } catch (e) {
+                console.error("Error calling getLevelCode: ", e);
+                setTimeout(callGetLevelCode, 100);
+            }
+        }
+
+        function playSound() {
+            var audio = new Audio('press.mp3');
+            audio.play();
+        }
+
+        function getUrlsFromFile() {
+            return fetch('urls.txt')
+                .then(response => response.text())
+                .then(text => text.split('\n').map(url => url.trim()).filter(url => url));
+        }
+
+        function enableSugarDrops() {
+            playSound();
+            let currentUrl = window.location.href;
+            if (!currentUrl.includes('/sugardropindex.html')) {
+                const newUrl = currentUrl.replace('?', 'sugardropindex.html?');
+                window.location.href = newUrl;
+            }
+        }
+
+        function redirectToEditor() {
+            playSound();
+            window.location.href = 'https://wonkaccs.github.io/CandyCrushSagaEditorFE/';
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(callGetLevelCode, 100);
+            document.getElementById("restartButton").addEventListener("click", function () {
+                playSound();
+                setTimeout(callGetLevelCode, 100);
+            });
+            document.getElementById("shuffleButton").addEventListener("click", function () {
+                playSound();
+                getUrlsFromFile().then(urls => {
+                    if (urls.length > 0) {
+                        const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+                        window.location.href = randomUrl;
+                    } else {
+                        console.error('No URLs found in the file.');
+                    }
+                }).catch(error => console.error('Error reading URLs file:', error));
+            });
+            document.getElementById("sugarDropButton").addEventListener("click", enableSugarDrops);
+            document.getElementById("editorButton").addEventListener("click", redirectToEditor);
+        });
+    </script>
 </head>
 <body>
-<center>
-    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
-</center>
-<button id="restartButton"></button>
-<button id="shuffleButton"></button>
-<button id="sugarDropButton"></button>
-<button id="editorButton"></button>
+    <center>
+        <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
+    </center>
+    <button id="restartButton"></button>
+    <button id="shuffleButton"></button>
+    <button id="sugarDropButton"></button>
+    <button id="editorButton"></button>
 </body>
 </html>
