@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Crush Custom Level</title>
+    <style>
+        body {
+            background: no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #flashContainer {
+            position: relative;
+            width: 755px;  
+            height: 600px; 
+            margin: 20px 0;
+            overflow: hidden; 
+        }
+
+        #flash {
+            box-shadow: 0px 0px 25px rgba(0, 0, 0, 1.0), 
+                        0 0 15px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        #uploadedBackground, #blurredBackground {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            display: none; 
+            object-fit: cover; 
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        #blurredBackground {
+            filter: blur(10px); 
+        }
+
+        #buttonContainer {
+            display: flex;
+            justify-content: center;
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        button {
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 50px;
+            height: 50px;
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+            margin: 5px;
+            position: relative;
+        }
+
+        #dock {
+            width: 33%;
+            height: 15%;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+
+        #restartButton { background-image: url('restart.png'); }
+        #restartButton:active { background-image: url('restart_pressed.png'); }
+        #shuffleButton { background-image: url('shuffle.png'); }
+        #shuffleButton:active { background-image: url('shuffle_pressed.png'); }
+        #sugarDropButton { background-image: url('disable_sugar_drops.png'); }
+        #sugarDropButton:active { background-image: url('disable_sugardrops_pressed.png'); }
+        #editorButton { background-image: url('editor.png'); }
+        #editorButton:active { background-image: url('editor_pressed.png'); }
+        #basiliskButton { background-image: url('get_basilisk.png'); }
+        #basiliskButton:active { background-image: url('get_basilisk_pressed.png'); }
+        #discordButton { background-image: url('discord.png'); }
+        #discordButton:active { background-image: url('discord_pressed.png'); }
+        #uploadButton { background-image: url('sitebackground.png'); }
+        #uploadButton:active { background-image: url('sitebackground_pressed.png'); }
+
+ 
+        .tooltip {
+            display: none;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: 2px solid gray;
+            border-radius: 5px;
+            padding: 5px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+  
+        button:hover .tooltip {
+            display: block;
+            top: -50%;
+            text-align: center; 
+            z-index: 10;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #popupOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+            transition: opacity 1s ease;
+        }
+
+        #popup {
+            display: none; 
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            background: rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(10px); 
+            padding: 20px;
+            border-radius: 0px;
+            z-index: 3;
+            text-align: center; 
+            width: 450px; 
+            height: 175px; 
+            transition: transform 0.5s ease;
+        }
+
+        #popup button {
+            transition: transform 0.5s ease, filter 0.2s ease;
+        }
+
+        #popup button:hover {
+            transform: scale(1.2); 
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)); 
+        }
+
+        #popup button {
+            margin: 10px;
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            display: inline-block; 
+        }
+
+        #uploadBackgroundButton { background-image: url('symbol_background.png'); }
+        #uploadForegroundButton { background-image: url('symbol_foreground.png'); }
+        #selectDockButton { background-image: url('symbol_dock.png'); }
+        #closePopupButton { background-image: url('symbol_close.png'); }
+        #closePopupButton:active { background-image: url('symbol_close_pressed.png'); }
+
+
+        .iconLabel {
+            color: white;
+            font-size: 14px;
+            display: block; 
+            position: absolute; 
+            bottom: -25px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+        }
+
+        #closePopupText {
+            color: white;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none; 
+            z-index: 0;
+        }
+    </style>
+    <script>
+        const assetsToPreload = [
+            'bg1.jpg', 'bg2.jpg', 'bg3.jpg', 'bg4.jpg', 'bg5.jpg',
+            'bg6.jpg', 'bg7.jpg', 'bg8.jpg', 'bg9.jpg', 'bg10.jpg',
+            'bg11.jpg', 'bg12.jpg', 'bg13.jpg', 'bg14.jpg', 'bg15.jpg',
+            'bg16.jpg', 'bg17.jpg', 'bg18.jpg', 'bg19.jpg', 'bg20.jpg',
+            'restart.png', 'restart_pressed.png', 'shuffle.png', 'shuffle_pressed.png',
+            'disable_sugar_drops.png', 'disable_sugardrops_pressed.png', 'editor.png', 'editor_pressed.png',
+            'get_basilisk.png', 'get_basilisk_pressed.png', 'discord.png', 'discord_pressed.png',
+            'sitebackground.png', 'sitebackground_pressed.png', 'symbol_background.png',
+            'symbol_foreground.png', 'symbol_dock.png', 'symbol_close.png', 'symbol_close_pressed.png',
+            'press.mp3', 'dock.png', 'SugarDrop_loader.swf'
+        ];
+
+        function preloadAssets(assets) {
+            assets.forEach(asset => {
+                const img = new Image();
+                img.src = asset;
+            });
+            
+            assets.filter(asset => asset.endsWith('.mp3')).forEach(asset => {
+                const audio = new Audio(asset);
+                audio.load();
+            });
+        }
+
+        function getRandomBackground() {
+            const num = Math.floor(Math.random() * 20) + 1;
+            return `bg${num}.jpg`;
+        }
+
+        function decodeLevelCode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('levelCode') ? decodeURIComponent(urlParams.get('levelCode')) : null;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            preloadAssets(assetsToPreload); 
+
+            document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
+
+            const decodedLevelCode = decodeLevelCode();
+            if (decodedLevelCode) {
+                enableSugarDrops();
+            }
+
+            document.getElementById("uploadButton").addEventListener("click", function () {
+                openPopup();
+            });
+
+            
+            document.getElementById("uploadBackgroundButton").addEventListener("click", function () {
+                document.getElementById("fileInput").accept = "image/png, image/jpeg, image/gif, image/bmp, image/webp, video/mp4, video/webm, video/ogg";
+                document.getElementById("fileInput").click();
+
+                document.getElementById("fileInput").onchange = function (event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const uploadedBackground = document.getElementById("uploadedBackground");
+                            const blurredBackground = document.getElementById("blurredBackground");
+                            const backgroundVideo = document.getElementById("backgroundVideo");
+
+                            if (file.type.startsWith('video/')) {
+                                backgroundVideo.src = e.target.result;
+                                backgroundVideo.style.display = 'block'; 
+                                uploadedBackground.style.display = 'none'; 
+                                blurredBackground.style.display = 'none'; 
+                                backgroundVideo.play();
+                            } else {
+                                uploadedBackground.src = e.target.result;
+                                blurredBackground.src = e.target.result;
+                                uploadedBackground.style.display = 'block'; 
+                                blurredBackground.style.display = 'block'; 
+                                backgroundVideo.style.display = 'none'; 
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+            });
+
+            
+            document.getElementById("uploadForegroundButton").addEventListener("click", function () {
+                document.getElementById("fileInput").accept = "image/png, image/jpeg, image/gif, image/bmp, image/webp, video/mp4, video/webm, video/ogg";
+                document.getElementById("fileInput").click();
+
+                document.getElementById("fileInput").onchange = function (event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const foregroundVideo = document.getElementById("foregroundVideo");
+
+                            if (file.type.startsWith('video/')) {
+                                foregroundVideo.src = e.target.result;
+                                foregroundVideo.style.display = 'block';  
+                                document.body.style.backgroundImage = 'none'; 
+                                foregroundVideo.play();
+                            } else {
+                                document.body.style.backgroundImage = `url('${e.target.result}')`;
+                                foregroundVideo.style.display = 'none'; 
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+            });
+
+            document.getElementById("selectDockButton").addEventListener("click", function () {
+                alert('This feature is currently in the works! Check back later.');
+            });
+
+            document.getElementById("closePopupButton").addEventListener("click", function () {
+                closePopup();
+            });
+
+            setTimeout(callGetLevelCode, 100);
+        });
+
+        function callGetLevelCode() {
+            const flashElement = document.getElementById("flash");
+            try {
+                if (flashElement && typeof flashElement.getLevelCode === "function") {
+                    flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
+                } else {
+                    console.error("getLevelCode is not a function on flash element");
+                    setTimeout(callGetLevelCode, 100);
+                }
+            } catch (e) {
+                console.error("Error calling getLevelCode: ", e);
+                setTimeout(callGetLevelCode, 100);
+            }
+        }
+
+        
+
+        function playSound() {
+            const audio = new Audio('press.mp3');
+            audio.play();
+        }
+
+        function getUrlsFromFile() {
+            return fetch('urls.txt')
+                .then(response => response.text())
+                .then(text => text.split('\n').map(url => url.trim()).filter(url => url));
+        }
+
+        function enableSugarDrops() {
+    playSound();
+    let currentUrl = window.location.href;
+    if (currentUrl.includes('/sugardropindex.html')) {
+        window.location.href = currentUrl.replace('/sugardropindex.html', '');
+    }
+}
+
+
+        function redirectToEditor() {
+            playSound();
+            window.location.href = 'https://wonkaccs.github.io/CandyCrushSagaEditorFE/';
+        }
+
+        function redirectToBasilisk() {
+            playSound();
+            window.location.href = "https://drive.google.com/file/d/103KpMdMcqXbQgTFHCotAba4896h4NAKd/view?usp=sharing";
+        }
+
+        function redirectToDiscord() {
+            playSound();
+            window.location.href = "https://discord.gg/YXZDezFfTf";
+        }
+
+        function openPopup() {
+            document.getElementById("popupOverlay").style.display = 'block';
+            document.getElementById("popup").style.display = 'block';
+            setTimeout(() => {
+                document.getElementById("popup").style.transform = 'translate(-50%, 0)';
+            }, 10);
+        }
+
+        function closePopup() {
+            document.getElementById("popup").style.transform = 'translate(-50%, -100%)';
+            setTimeout(() => {
+                document.getElementById("popup").style.display = 'none';
+                document.getElementById("popupOverlay").style.display = 'none';
+            }, 300);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("restartButton").addEventListener("click", function () {
+                playSound();
+                setTimeout(callGetLevelCode, 100);
+            });
+
+            document.getElementById("shuffleButton").addEventListener("click", function () {
+                playSound();
+                getUrlsFromFile().then(urls => {
+                    if (urls.length > 0) {
+                        const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+                        window.location.href = randomUrl;
+                    } else {
+                        console.error('No URLs found in the file.');
+                    }
+                }).catch(error => console.error('Error reading URLs file:', error));
+            });
+
+            document.getElementById("sugarDropButton").addEventListener("click", enableSugarDrops);
+            document.getElementById("editorButton").addEventListener("click", redirectToEditor);
+            document.getElementById("basiliskButton").addEventListener("click", redirectToBasilisk);
+            document.getElementById("discordButton").addEventListener("click", redirectToDiscord);
+        });
+    </script>
+</head>
+<body>
+    <center>
+        <div id="flashContainer">
+            <img id="blurredBackground" alt="Blurred Background" style="display: none;">
+            <img id="uploadedBackground" alt="Uploaded Background" style="display: none;">
+            <video id="backgroundVideo" muted loop></video>
+            <object id="flash" type="application/x-shockwave-flash" data="SugarDrop_loader.swf" width="755" height="600">
+                <param name="movie" value="SugarDrop_loader.swf" />
+                <param name="wmode" value="transparent" />
+                <param name="allowScriptAccess" value="always" />
+                <param name="allowFullScreen" value="true" />
+            </object>
+        </div>
+    </center>
+    <video id="foregroundVideo" muted loop></video>
+    <img id="dock" src="dock.png" alt="Dock Image">
+    <div id="buttonContainer">
+        <button id="restartButton">
+            <span class="tooltip">Refresh</span>
+        </button>
+        <button id="shuffleButton">
+            <span class="tooltip">Shuffle</span>
+        </button>
+        <button id="sugarDropButton">
+            <span class="tooltip">Disable Sugar Drops</span>
+        </button>
+        <button id="editorButton">
+            <span class="tooltip">Editor</span>
+        </button>
+        <button id="basiliskButton">
+            <span class="tooltip">Get a Flash Enabled browser</span>
+        </button>
+        <button id="discordButton">
+            <span class="tooltip">CCSFE Discord Server</span>
+        </button>
+        <input type="file" id="fileInput" accept="image/png, image/jpeg, image/gif, image/bmp, image/webp, video/mp4, video/webm, video/ogg" style="display: none;">
+        <button id="uploadButton">
+            <span class="tooltip">Personalization</span>
+        </button>
+    </div>
+
+
+    <div id="popupOverlay"></div>
+
+
+    <div id="popup">
+        <h3 style="margin: 0;">Personalization</h3>
+        <div style="display: flex; justify-content: center;">
+            <div style="position: relative;">
+                <button id="uploadBackgroundButton"></button>
+                <span class="iconLabel">Background</span>
+            </div>
+            <div style="margin-left: 10px; position: relative;">
+                <button id="uploadForegroundButton"></button>
+                <span class="iconLabel">Foreground</span>
+            </div>
+
+            
+            <div style="margin-left: 10px; position: relative;">
+                <button id="selectDockButton"></button>
+                <span class="iconLabel">Docks</span>
+            </div>
+
+            
+            <div style="margin-left: 10px; position: relative;">
+                <button id="closePopupButton"></button>
+                <span class="iconLabel" id="closePopupText">Close</span>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        
+        #popupOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 5;
+        }
+
+        #popup {
+            display: none;
+            position: fixed;
+            top: 0%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 0px;
+            padding: 20px;
+            z-index: 6;
+            transition: transform 0.3s ease;
+        }
+
+        #popupOverlay.active, #popup.active {
+            display: block;
+        }
+    </style>
+</body>
+</html>
