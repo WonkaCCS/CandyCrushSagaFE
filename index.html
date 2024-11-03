@@ -242,9 +242,15 @@
         }
 
         function decodeLevelCode() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('levelCode') ? decodeURIComponent(urlParams.get('levelCode')) : null;
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('levelCode')) {
+            let levelCode = decodeURIComponent(urlParams.get('levelCode'));
+            levelCode = levelCode.replace(/"numIngredientsOnScreen":0,\s*/, '');
+            return levelCode;
+            }
+        return null;
         }
+
 
         document.addEventListener("DOMContentLoaded", function () {
             preloadAssets(assetsToPreload); 
