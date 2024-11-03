@@ -263,6 +263,15 @@
                     openPopup();
                 });
 
+                function decodeLevelCode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const levelCode = urlParams.get('levelCode');
+            if (levelCode) {
+                return decodeURIComponent(levelCode);
+            }
+            return null;
+        }
+
                 
                 document.getElementById("uploadBackgroundButton").addEventListener("click", function () {
                     document.getElementById("fileInput").accept = "image/png, image/jpeg, image/gif, image/bmp, image/webp, video/mp4, video/webm, video/ogg";
