@@ -359,13 +359,7 @@
                 .then(text => text.split('\n').map(url => url.trim()).filter(url => url));
         }
 
-        function enableSugarDrops() {
-    playSound();
-    let currentUrl = window.location.href;
-    if (currentUrl.includes('/sugardropindex.html')) {
-        window.location.href = currentUrl.replace('/sugardropindex.html', '');
-    }
-}
+        
 
 
         function redirectToEditor() {
