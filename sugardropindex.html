@@ -27,6 +27,7 @@
             height: 600px; 
             margin: 20px 0;
             overflow: hidden; 
+            top: -2px;
         }
 
         #flash {
@@ -92,7 +93,7 @@
         #restartButton:active { background-image: url('restart_pressed.png'); }
         #shuffleButton { background-image: url('shuffle.png'); }
         #shuffleButton:active { background-image: url('shuffle_pressed.png'); }
-        #sugarDropButton { background-image: url('disable_sugar_drops.png'); }
+        #sugarDropButton { background-image: url('disable_sugardrops.png'); }
         #sugarDropButton:active { background-image: url('disable_sugardrops_pressed.png'); }
         #editorButton { background-image: url('editor.png'); }
         #editorButton:active { background-image: url('editor_pressed.png'); }
@@ -103,7 +104,7 @@
         #uploadButton { background-image: url('sitebackground.png'); }
         #uploadButton:active { background-image: url('sitebackground_pressed.png'); }
 
- 
+
         .tooltip {
             display: none;
             position: absolute;
@@ -115,7 +116,7 @@
             white-space: nowrap;
             z-index: 10;
         }
-  
+
         button:hover .tooltip {
             display: block;
             top: -50%;
@@ -217,7 +218,7 @@
             'bg11.jpg', 'bg12.jpg', 'bg13.jpg', 'bg14.jpg', 'bg15.jpg',
             'bg16.jpg', 'bg17.jpg', 'bg18.jpg', 'bg19.jpg', 'bg20.jpg',
             'restart.png', 'restart_pressed.png', 'shuffle.png', 'shuffle_pressed.png',
-            'disable_sugar_drops.png', 'disable_sugardrops_pressed.png', 'editor.png', 'editor_pressed.png',
+            'disable_sugardrops.png', 'disable_sugardrops_pressed.png', 'editor.png', 'editor_pressed.png',
             'get_basilisk.png', 'get_basilisk_pressed.png', 'discord.png', 'discord_pressed.png',
             'sitebackground.png', 'sitebackground_pressed.png', 'symbol_background.png',
             'symbol_foreground.png', 'symbol_dock.png', 'symbol_close.png', 'symbol_close_pressed.png',
@@ -241,24 +242,32 @@
             return `bg${num}.jpg`;
         }
 
-        function decodeLevelCode() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('levelCode') ? decodeURIComponent(urlParams.get('levelCode')) : null;
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('levelCode')) {
+            let levelCode = decodeURIComponent(urlParams.get('levelCode'));
+            levelCode = levelCode.replace(/"maxNumIngredientsOnScreen":0,\s*/, '');
+            urlParams.set('levelCode', encodeURIComponent(levelCode));
         }
+
 
         document.addEventListener("DOMContentLoaded", function () {
             preloadAssets(assetsToPreload); 
 
             document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
 
-            const decodedLevelCode = decodeLevelCode();
-            if (decodedLevelCode) {
-                enableSugarDrops();
-            }
-
+            
             document.getElementById("uploadButton").addEventListener("click", function () {
                 openPopup();
             });
+
+            function decodeLevelCode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const levelCode = urlParams.get('levelCode');
+        if (levelCode) {
+            return decodeURIComponent(levelCode);
+        }
+        return null;
+    }
 
             
             document.getElementById("uploadBackgroundButton").addEventListener("click", function () {
@@ -346,6 +355,15 @@
             }
         }
 
+        function resizeDock() {
+            const dock = document.getElementById("dock");
+            const flashContainer = document.getElementById("flashContainer");    
+            const flashHeight = flashContainer.offsetHeight;
+            dock.style.height = `${flashHeight * 0.15}px`; 
+        }
+
+        window.addEventListener("resize", resizeDock);
+        window.addEventListener("DOMContentLoaded", resizeDock); 
         
 
         function playSound() {
@@ -359,13 +377,21 @@
                 .then(text => text.split('\n').map(url => url.trim()).filter(url => url));
         }
 
-        
+        function enableSugarDrops() {
+    playSound();
+    let currentUrl = window.location.href;
+    if (currentUrl.includes('sugardropindex.html')) {
+        window.location.href = currentUrl.replace('sugardropindex.html', 'index.html');
+    }
+}
 
 
         function redirectToEditor() {
             playSound();
             window.location.href = 'https://wonkaccs.github.io/CandyCrushSagaEditorFE/';
         }
+
+        
 
         function redirectToBasilisk() {
             playSound();
@@ -442,7 +468,7 @@
             <span class="tooltip">Shuffle</span>
         </button>
         <button id="sugarDropButton">
-            <span class="tooltip">Disable Sugar Drops</span>
+            <span class="tooltip">Enable Sugar Drops</span>
         </button>
         <button id="editorButton">
             <span class="tooltip">Editor</span>
