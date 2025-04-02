@@ -460,25 +460,7 @@
                     <param name="allowFullScreen" value="true" />
                 </object>
             </div>
-            <script>
-                window.onload = function() {
-                    const flashContainer = document.getElementById("flashContainer");
-                    const rotations = [90, -90, 180]; // Possible rotations
-                    const randomRotation = rotations[Math.floor(Math.random() * rotations.length)];
             
-                    // Centering & rotating
-                    flashContainer.style.position = "absolute";
-                    flashContainer.style.top = "50%";
-                    flashContainer.style.left = "50%";
-                    flashContainer.style.transformOrigin = "center";
-                    flashContainer.style.transform = `translate(-50%, -60%) rotate(${randomRotation}deg)`;
-            
-                    // Stretch when rotated 90° or -90°
-                    if (randomRotation === 90 || randomRotation === -90) {
-                        flashContainer.style.transform += " scaleX(0.8)"; // Stretch vertically to fit
-                    }
-                };
-            </script>
             
         </center>
         <video id="foregroundVideo" muted loop></video>
